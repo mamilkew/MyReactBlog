@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'MyReactBlog.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
-
+# django.db.backends.mysql
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'MyReactBlog',
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'myreactblog',
         'USER': 'MILKK',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
