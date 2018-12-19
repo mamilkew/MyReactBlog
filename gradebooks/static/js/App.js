@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-{/*import logo from './logo.svg';
-import './App.css';*/}
+import logo from '../media/logo.svg';
+import '../css/App.css';
 import HelloApp from './HelloApp';
 import MyStatelessComponent from './MyStatelessComponent';
 
@@ -16,7 +16,7 @@ class App extends Component {
           />
 
         <header className="App-header">
-
+          <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
