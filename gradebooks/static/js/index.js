@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 // import '../css/index.css';
-import App from './App';
-// import App from './Table';
+// import App from './App';
+import App from './React_table';
 //import * as serviceWorker from './serviceWorker';
 
 

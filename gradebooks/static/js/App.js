@@ -81,7 +81,6 @@ class App extends Component {
     } else {
       return (
         <div>
-          {/*<Table columns={columns} dataSource={list} />*/}
           {list.map(item => (
             <div key={item.username} id={item.learner_id}>
               <h1>{item.grades}</h1>
