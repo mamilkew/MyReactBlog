@@ -12,12 +12,11 @@ class React_table extends Component {
       error: null,
       isLoaded: false,
       list: [],
-      columns: [],
     };
   }
 
   componentDidMount() {
-    fetch('http://cbbd438c.ngrok.io/api/learner/') //http://127.0.0.1:8000/gradebooks/api_learner/
+    fetch('http://cbbd438c.ngrok.io/api/learner/?page=2') //http://127.0.0.1:8000/gradebooks/api_learner/
       .then(res => res.json())
       .then(
         (result) => {
@@ -44,8 +43,15 @@ class React_table extends Component {
     } else {
       return (
         <div>
+        <h1>Count: {list.count}</h1>
         <ReactTable
         data={list.results}
+        defaultPageSize={10}
+        loading={this.state.loading}
+        showPagination={true}
+        showPaginationTop={false}
+        showPaginationBottom={true}
+
         columns={
           [
             {
@@ -60,9 +66,18 @@ class React_table extends Component {
               Header: "Email",
               accessor: "email"
             },
+            {
+              Header: "Assignment",
+              columns: [
+                {
+                  Header: "Ass Name",
+                  id: "assign_name",
+                  accessor: d => d.assign_name
+                }
+              ]
+            },
           ]
         }
-        defaultPageSize={10}
          />
         </div>
       );
