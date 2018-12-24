@@ -3,6 +3,13 @@ import logo from '../media/logo.svg';
 import '../css/App.css';
 // import HelloApp from './HelloApp';
 // import MyStatelessComponent from './MyStatelessComponent';
+// import { LocaleProvider, DatePicker, message } from 'antd';
+// The default locale is en-US, but we can change it to other language
+// import frFR from 'antd/lib/locale-provider/th_TH';
+// import moment from 'moment';
+// import 'moment/locale/th';
+
+// moment.locale('th');
 
 const lists = [
   {
@@ -54,7 +61,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('http://cbbd438c.ngrok.io/api/learner/') //http://127.0.0.1:8000/gradebooks/api_learner/
+    fetch('https://49d5b079.ngrok.io/api/learner/') //http://127.0.0.1:8000/gradebooks/api_learner/
       .then(res => res.json())
       .then(
         (result) => {
