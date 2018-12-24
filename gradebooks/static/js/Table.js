@@ -1,102 +1,106 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
 import reqwest from 'reqwest';
-// import { LocaleProvider, DatePicker, message } from 'antd';
-// The default locale is en-US, but we can change it to other language
-// import frFR from 'antd/lib/locale-provider/th_TH';
-// import moment from 'moment';
-// import 'moment/locale/th';
 
-// moment.locale('th');
-
-// const columns = [{
-//   title: 'Name',
-//   dataIndex: 'username',
-//   sorter: true,
-//   width: '30%',
-// }, {
-//   title: 'Grade',
-//   dataIndex: 'grade',
-//   width: '20%',
-// }, {
-//   title: 'Email',
-//   dataIndex: 'email',
-// }];
-//
 const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
+  title: 'Username',
+  dataIndex: 'username',
   sorter: true,
-  render: name => `${name.first} ${name.last}`,
-  width: '20%',
+  width: '10%',
 }, {
-  title: 'Gender',
-  dataIndex: 'gender',
-  filters: [
-    { text: 'Male', value: 'male' },
-    { text: 'Female', value: 'female' },
+  title: 'Grade',
+  dataIndex: 'grades',
+  filters: [{
+      text: 'Zero',
+      value: '0.0'
+    },
+    {
+      text: 'Full',
+      value: '1.0'
+    },
   ],
-  width: '20%',
+  width: '5%',
 }, {
   title: 'Email',
   dataIndex: 'email',
-}];
+  width: '10%',
+},
+];
 
 class Table_app extends React.Component {
-  state = {
-    data: [],
-    pagination: {},
-    loading: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      pagination: {},
+      loading: false,
+    };
+
+    this.handleTableChange = (pagination, filters, sorter) => {
+      const pager = { pagination };
+      pager.current = pagination.current;
+      this.setState({
+        pagination: pager,
+      });
+      this.fetch({
+        results: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        filters,
+      });
+    }
+
+    this.fetch = (params = {}) => {
+      console.log('params:', params);
+      this.setState({ loading: true });
+      reqwest({
+        url: 'https://49d5b079.ngrok.io/api/learner/',
+        method: 'get',
+        data: {
+          results: 10,
+          params,
+        },
+        type: 'json',
+      }).then((data) => {
+        const pagination = { pagination };
+        // Read total count from server
+        pagination.total = data.count;
+        pagination.showTotal = (total, range) => `${range[0]}-${range[1]} of ${total} items`;
+        // pagination.showSizeChanger = true;
+        // pagination.total = 200;
+        const ass_l = {
+          title: 'Assignment',
+          children: data.results[0].assign_list.map(
+            item => Object.assign({},
+              {
+                title: item.assign_name,
+                dataIndex: item.assign_name,
+                render: score => `${item.score}`,
+              }
+            )
+          )
+        };
+
+        columns.push(ass_l);
+        this.setState({
+          loading: false,
+          data: data.results,
+          pagination,
+        });
+      });
+    }
+  }
 
   componentDidMount() {
     this.fetch();
-  }
-
-  handleTableChange = (pagination, filters, sorter) => {
-    const pager = { ...this.state.pagination };
-    pager.current = pagination.current;
-    this.setState({
-      pagination: pager,
-    });
-    this.fetch({
-      results: pagination.pageSize,
-      page: pagination.current,
-      sortField: sorter.field,
-      sortOrder: sorter.order,
-      ...filters,
-    });
-  }
-
-  fetch = (params = {}) => {
-    console.log('params:', params);
-    this.setState({ loading: true });
-    reqwest({
-      url: 'https://randomuser.me/api',
-      method: 'get',
-      data: {
-        results: 10,
-        ...params,
-      },
-      type: 'json',
-    }).then((data) => {
-      const pagination = { ...this.state.pagination };
-      // Read total count from server
-      // pagination.total = data.totalCount;
-      pagination.total = 200;
-      this.setState({
-        loading: false,
-        data: data.results,
-        pagination,
-      });
-    });
   }
 
   render() {
     return (
       <Table
         columns={columns}
-        rowKey={record => record.login.uuid}
+        rowKey={record => record.username}
         dataSource={this.state.data}
         pagination={this.state.pagination}
         loading={this.state.loading}
