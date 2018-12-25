@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import logo from '../media/logo.svg';
 import '../css/App.css';
-// import HelloApp from './HelloApp';
-// import MyStatelessComponent from './MyStatelessComponent';
+import HelloApp from './HelloApp';
+import MyStatelessComponent from './MyStatelessComponent';
 // import { LocaleProvider, DatePicker, message } from 'antd';
 // The default locale is en-US, but we can change it to other language
 // import frFR from 'antd/lib/locale-provider/th_TH';
@@ -11,94 +11,38 @@ import '../css/App.css';
 
 // moment.locale('th');
 
-const lists = [
-  {
-    'id': 1,
-    'title': '1st Item',
-    'description': 'Description here.'
-  },
-  {
-    'id': 2,
-    'title': '2nd Item',
-    'description': 'Another description here.'
-  },
-  {
-    'id': 3,
-    'title': '3rd Item',
-    'description': 'Third description here.'
-  }
-];
-// class App extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { lists };
-//   }
-//
-//   render() {
-//     return (
-//       <div>
-//         {this.state.lists.map(item => (
-//           <div>
-//             <h1>{item.title}</h1>
-//             <span>{item.description}</span>
-//           </div>
-//         ))}
-//       </div>
-//     );
-//   }
-// }
-//
-
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      list: [],
-      columns: [],
-    };
-  }
-
-  componentDidMount() {
-    fetch('https://49d5b079.ngrok.io/api/learner/') //http://127.0.0.1:8000/gradebooks/api_learner/
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            list: result.results,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-  }
-
   render() {
-    const { error, isLoaded, list, columns } = this.state;
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <div>
-          {list.map(item => (
-            <div key={item.username} id={item.learner_id}>
-              <h1>{item.grades}</h1>
-              <span>{item.email}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
+    return (
+      <div className="App">
+
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.js</code> and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+
+
+        <HelloApp message="This is message sent from App.js"/>
+
+         <MyStatelessComponent
+            title="Stateless"
+            message="Example of Stateless Component"
+          />
+      </div>
+    );
   }
 }
+
 
 
 
