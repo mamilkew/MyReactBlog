@@ -49,7 +49,7 @@ class Table_app extends React.Component {
         pagination: pager,
       });
       this.fetch({
-        results: pagination.pageSize,
+        // results: pagination.pageSize,
         page: pagination.current,
         sortField: sorter.field,
         sortOrder: sorter.order,
@@ -57,20 +57,22 @@ class Table_app extends React.Component {
       });
     }
 
-    this.fetch = (params = {}) => {
+    this.fetch = (params = {page: 1}) => {
       console.log('params:', params);
       this.setState({ loading: true });
       reqwest({
         url: 'https://5ab7a4d3.ngrok.io/api/learner/',
         method: 'get',
         data: {
-          results: 10,
-          params,
+          // results: 20,
+          // params,
+          page: params.page
         },
         type: 'json',
       }).then((data) => {
         const pagination = { pagination };
         // Read total count from server
+        // pagination.pageSize = 25;
         pagination.total = data.count;
         pagination.showTotal = (total, range) => `${range[0]}-${range[1]} of ${total} items`;
         // pagination.showSizeChanger = true;
@@ -123,7 +125,7 @@ class Table_app extends React.Component {
         pagination={this.state.pagination}
         loading={this.state.loading}
         onChange={this.handleTableChange}
-        size="middle"
+        size="small"
         scroll={{ x: 4000, y: 300}}
         bordered
       />
