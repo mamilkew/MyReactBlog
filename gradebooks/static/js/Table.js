@@ -6,7 +6,8 @@ const columns = [{
   title: 'Username',
   dataIndex: 'username',
   sorter: true,
-  width: '10%',
+  width: 150,
+  fixed: 'left',
 }, {
   title: 'Grade',
   dataIndex: 'grades',
@@ -19,11 +20,16 @@ const columns = [{
       value: '1.0'
     },
   ],
-  width: '5%',
+  fixed: 'left',
+  width: 100,
 }, {
   title: 'Email',
   dataIndex: 'email',
-  width: '10%',
+  width: 250,
+}, {
+  title: 'Assignment',
+  children: [],
+  width: 3500,
 },
 ];
 
@@ -55,7 +61,7 @@ class Table_app extends React.Component {
       console.log('params:', params);
       this.setState({ loading: true });
       reqwest({
-        url: 'https://49d5b079.ngrok.io/api/learner/',
+        url: 'https://5ab7a4d3.ngrok.io/api/learner/',
         method: 'get',
         data: {
           results: 10,
@@ -68,21 +74,33 @@ class Table_app extends React.Component {
         pagination.total = data.count;
         pagination.showTotal = (total, range) => `${range[0]}-${range[1]} of ${total} items`;
         // pagination.showSizeChanger = true;
-        // pagination.total = 200;
-        const ass_l = {
-          title: 'Assignment',
-          children: data.results[0].assign_list.map(
+        // pagination.total = 200;.
+
+        columns[3].children = data.results[0].assign_list.map(
             item => Object.assign({},
               {
                 title: item.assign_name,
                 dataIndex: item.assign_name,
                 render: score => `${item.score}`,
+                width: 3500/data.results[0].assign_list.length,
               }
             )
-          )
-        };
+        );
 
-        columns.push(ass_l);
+        // const ass_l = {
+        //   title: 'Assignment',
+        //   children: data.results[0].assign_list.map(
+        //     item => Object.assign({},
+        //       {
+        //         title: item.assign_name,
+        //         dataIndex: item.assign_name,
+        //         render: score => `${item.score}`,
+        //       }
+        //     )
+        //   )
+        // };
+        // columns.push(ass_l);
+
         this.setState({
           loading: false,
           data: data.results,
@@ -105,6 +123,9 @@ class Table_app extends React.Component {
         pagination={this.state.pagination}
         loading={this.state.loading}
         onChange={this.handleTableChange}
+        size="middle"
+        scroll={{ x: 4000, y: 300}}
+        bordered
       />
     );
   }
