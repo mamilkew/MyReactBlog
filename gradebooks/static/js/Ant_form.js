@@ -26,6 +26,7 @@ class FilterInput extends React.Component {
     this.state = {
       number: value.number || 0,
       assign: value.assign,
+      condition: value.condition,
     };
   }
 
@@ -45,6 +46,13 @@ class FilterInput extends React.Component {
       this.setState({ assign });
     }
     this.triggerChange({ assign });
+  }
+
+  handleConditionChange = (condition) => {
+    if (!('value' in this.props)) {
+      this.setState({ condition });
+    }
+    this.triggerChange({ condition });
   }
 
   triggerChange = (changedValue) => {
@@ -84,13 +92,6 @@ class FilterInput extends React.Component {
     const state = this.state;
     return (
       <span>
-        <Input
-          type="text"
-          size={size}
-          value={state.number}
-          onChange={this.handleNumberChange}
-          style={{ width: '65%', marginRight: '3%' }}
-        />
         <Select
           mode="multiple"
           style={{ width: '100%' }}
@@ -100,6 +101,24 @@ class FilterInput extends React.Component {
         >
         {children}
         </Select>
+
+        <Select
+          value={state.condition}
+          size={size}
+          style={{ width: '50%' }}
+          onChange={this.handleConditionChange}
+        >
+          <Option value="lessThan">Less Than</Option>
+          <Option value="equalsTo">Equals To</Option>
+        </Select>
+
+        <Input
+          type="text"
+          size={size}
+          value={state.number}
+          onChange={this.handleNumberChange}
+          style={{ width: '65%', marginRight: '3%' }}
+        />
       </span>
     );
   }
@@ -129,9 +148,10 @@ class Demo extends React.Component {
       <Form layout="inline" onSubmit={this.handleSubmit}>
         <Form.Item label="Filtering">
           {getFieldDecorator('filtering', {
-            initialValue: { number: 0, assign: 'rmb' },
+            initialValue: { number: 0, assign: [], condition: '' },
             rules: [{ validator: this.checkScore }],
-          })(<FilterInput />)}
+          })
+          (<FilterInput />)}
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">Submit</Button>
