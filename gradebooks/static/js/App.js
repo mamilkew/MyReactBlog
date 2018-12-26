@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import logo from '../media/logo.svg';
 import '../css/App.css';
-import HelloApp from './HelloApp';
+// import HelloApp from './HelloApp';
 // import MyStatelessComponent from './MyStatelessComponent';
-// import Table_app from './Table';
-import Ant_Table from './Ant_table';
+import Table_app from './Table';
+// import Ant_Table from './Ant_table';
 // import { LocaleProvider, DatePicker, message } from 'antd';
 // The default locale is en-US, but we can change it to other language
 // import frFR from 'antd/lib/locale-provider/th_TH';
@@ -31,17 +31,17 @@ class App extends Component {
           >
             Learn React
           </a>
-        </header>*/}
+        </header>
 
 
         <HelloApp message="This is message sent from App.js" />
 
-        {/*<MyStatelessComponent
+        <MyStatelessComponent
           title="Stateless"
           message="Example of Stateless Component"
         />*/}
 
-        <Ant_Table />
+        <Table_app />
       </div>
     );
   }

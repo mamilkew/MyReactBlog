@@ -2,7 +2,6 @@ import {
   Form, Input, Select, Button,
 } from 'antd';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import reqwest from 'reqwest';
 
 const { Option } = Select;
@@ -163,10 +162,15 @@ class Demo extends React.Component {
 
 const WrappedDemo = Form.create()(Demo);
 
-ReactDOM.render(
-  <div>
-    <WrappedDemo />
-    <div className="search-result-list">Search Result List</div>
-  </div>,
-  document.getElementById('filterForm')
-);
+class FilterFormApp extends React.Component {
+  render() {
+    return (
+      <div>
+        <WrappedDemo />
+        <div className="search-result-list">Search Result</div>
+      </div>
+    );
+  }
+}
+
+export default FilterFormApp;
