@@ -6,7 +6,7 @@ var ExtractText = require('extract-text-webpack-plugin');
 module.exports = {
     context: __dirname,
 
-    entry: './gradebooks/static/js/index',
+    entry: './gradebooks/static/js/Ant_form',
 
     output: {
         path: path.resolve('./gradebooks/static/bundles/'),
