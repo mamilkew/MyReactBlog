@@ -67,7 +67,7 @@ class FilterInput extends React.Component {
     console.log('params:', params);
     this.setState({ loading: true });
     reqwest({
-      url: 'https://3b7bcc2a.ngrok.io/api/assignlist/',
+      url: 'https://f3cbec5d.ngrok.io/api/assignlist/',
       method: 'get',
       data: {},
       type: 'json',
@@ -108,7 +108,7 @@ class FilterInput extends React.Component {
           onChange={this.handleConditionChange}
         >
           <Option value="lessThan">Less Than</Option>
-          <Option value="equalsTo">Equals To</Option>
+          <Option value="moreThan">More Than</Option>
         </Select>
 
         <Input
@@ -129,6 +129,14 @@ class Demo extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        reqwest({
+          url: 'https://f3cbec5d.ngrok.io/api/result/',
+          method: 'get',
+          data: values.filtering,
+          type: 'json',
+        }).then((data) => {
+          console.log(data);
+        });
       }
     });
   }

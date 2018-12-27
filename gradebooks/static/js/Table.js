@@ -61,7 +61,7 @@ class Table_app extends React.Component {
       console.log('params:', params);
       this.setState({ loading: true });
       reqwest({
-        url: 'https://3b7bcc2a.ngrok.io/api/result/',
+        url: 'https://cbb69564.ngrok.io/api/result/',
         method: 'get',
         data: {
           // results: 20,
