@@ -13,7 +13,9 @@ def index(request):
 
 
 def api_learner(request):
-    learner = Learner.objects.all().values()
-    print(list(learner))
+    if request.method == 'GET':
+        print(request.GET)
+        learner = Learner.objects.filter(pk=request.GET.get('number')).values()
+        print(learner)
 
     return JsonResponse({'results': list(learner)})
