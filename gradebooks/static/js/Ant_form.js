@@ -3,9 +3,40 @@ import {
 } from 'antd';
 import React from 'react';
 import reqwest from 'reqwest';
+import Table_app from './Table';
 
 const { Option } = Select;
 let children = [];
+const columns = [{
+  title: 'Username',
+  dataIndex: 'username',
+  sorter: true,
+  width: 150,
+  fixed: 'left',
+}, {
+  title: 'Grade',
+  dataIndex: 'grades',
+  filters: [{
+      text: 'Zero',
+      value: '0.0'
+    },
+    {
+      text: 'Full',
+      value: '1.0'
+    },
+  ],
+  fixed: 'left',
+  width: 100,
+}, {
+  title: 'Email',
+  dataIndex: 'email',
+  width: 250,
+}, {
+  title: 'Assignment',
+  children: [],
+  width: 3500,
+},
+];
 
 class FilterInput extends React.Component {
   static getDerivedStateFromProps(nextProps) {
@@ -20,16 +51,16 @@ class FilterInput extends React.Component {
 
   constructor(props) {
     super(props);
-
     const value = props.value || {};
     this.state = {
-      number: value.number || 0,
+      number: value.number,
       assign: value.assign,
       condition: value.condition,
     };
   }
 
   handleNumberChange = (e) => {
+      console.log(e.target.value);
     const number = parseFloat(e.target.value || 0, 10);
     if (Number.isNaN(number)) {
       return;
@@ -62,12 +93,15 @@ class FilterInput extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.fetch();
+  }
 
   fetch = (params = {}) => {
     console.log('params:', params);
     this.setState({ loading: true });
     reqwest({
-      url: 'https://f3cbec5d.ngrok.io/api/assignlist/',
+      url: 'https://5a84f018.ngrok.io/api/v1/assignlist/',
       method: 'get',
       data: {},
       type: 'json',
@@ -82,9 +116,6 @@ class FilterInput extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.fetch();
-  }
 
   render() {
     const { size } = this.props;
@@ -109,10 +140,11 @@ class FilterInput extends React.Component {
         >
           <Option value="lessThan">Less Than</Option>
           <Option value="moreThan">More Than</Option>
+          <Option value="moreThanAndEquals">More Than and Equals</Option>
         </Select>
 
         <Input
-          type="text"
+          type="number"
           size={size}
           value={state.number}
           onChange={this.handleNumberChange}
@@ -130,22 +162,46 @@ class Demo extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         reqwest({
-          url: 'https://f3cbec5d.ngrok.io/api/result/',
-          method: 'get',
+          url: 'https://5a84f018.ngrok.io/api/v1/result/',
+          method: 'post',
           data: values.filtering,
           type: 'json',
         }).then((data) => {
-          console.log(data);
-        });
-      }
+            console.log(data);
+            const pagination = { pagination };
+            // Read total count from server
+            // pagination.pageSize = 25;
+            pagination.total = data.count;
+            pagination.showTotal = (total, range) => `${range[0]}-${range[1]} of ${total} items`;
+            // pagination.showSizeChanger = true;
+            // pagination.total = 200;.
+
+            columns[3].children = data.results[0].assign_list.map(
+                item => Object.assign({},
+                  {
+                    title: item.assign_name,
+                    dataIndex: item.assign_name,
+                    render: score => `${item.score}`,
+                    width: 3500/data.results[0].assign_list.length,
+                  }
+                )
+            );
+            // Table_app = (pagination, filters, sorter) => {this.props.handleTableChange(pagination, filters, sorter)};
+            Table_app.state({
+                loading: false,
+                data: data.results,
+                pagination,
+                columns: columns,
+            });
+        });}
     });
   }
 
   checkScore = (rule, value, callback) => {
-    if (value.number > 0) {
+    // if (value.number > 0) {
       callback();
       return;
-    }
+    // }
     callback('Score must greater than zero!');
   }
 
